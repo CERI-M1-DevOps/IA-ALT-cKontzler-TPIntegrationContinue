@@ -1,0 +1,22 @@
+name: Java CI with Maven - Test and package
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installer Java 21 Corretto
+        uses: actions/setup-java@v4
+        with:
+          distribution: corretto
+          java-version: '21'
+
+      - name: Construire et lancer les tests
+        run: mvn -B package
