@@ -4,8 +4,8 @@ public class Noeud {
     private Object element;
     private Noeud suivant;
 
-    public Noeud(int e, Noeud suivant) {
-        element = e;
+    public Noeud(Object element, Noeud suivant) {
+        this.element = element;
         this.suivant = suivant;
     }
 
@@ -25,6 +25,7 @@ public class Noeud {
         this.suivant = suivant;
     }
 
+    @Override
     public String toString() {
         return "Noeud(" + element + ")";
     }

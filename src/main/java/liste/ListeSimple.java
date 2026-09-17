@@ -1,5 +1,7 @@
 package liste;
 
+import java.util.Objects;
+
 public class ListeSimple {
     private long size;
     Noeud tete;
@@ -15,17 +17,20 @@ public class ListeSimple {
 
     public void modifiePremier(Object element, Object nouvelleValeur) {
         Noeud courant = tete;
-        while (courant != null && courant.getElement() != element)
+        while (courant != null && !Objects.equals(courant.getElement(), element)) {
             courant = courant.getSuivant();
-        if (courant != null)
+        }
+        if (courant != null) {
             courant.setElement(nouvelleValeur);
+        }
     }
 
     public void modifieTous(Object element, Object nouvelleValeur) {
         Noeud courant = tete;
         while (courant != null) {
-            if (courant.getElement() == element)
+            if (Objects.equals(courant.getElement(), element)) {
                 courant.setElement(nouvelleValeur);
+            }
             courant = courant.getSuivant();
         }
     }
@@ -45,14 +50,14 @@ public class ListeSimple {
 
     public void supprimePremier(Object element) {
         if (tete != null) {
-            if (tete.getElement() == element) {
+            if (Objects.equals(tete.getElement(), element)) {
                 tete = tete.getSuivant();
                 size--;
                 return;
             }
             Noeud precedent = tete;
             Noeud courant = tete.getSuivant();
-            while (courant != null && courant.getElement() != element) {
+            while (courant != null && !Objects.equals(courant.getElement(), element)) {
                 precedent = precedent.getSuivant();
                 courant = courant.getSuivant();
             }
@@ -63,14 +68,14 @@ public class ListeSimple {
         }
     }
 
-    public void supprimeTous(int element) {
+    public void supprimeTous(Object element) {
        tete = supprimeTousRecurs(element, tete);
     }
 
     public Noeud supprimeTousRecurs(Object element, Noeud tete) {
         if (tete != null) {
             Noeud suiteListe = supprimeTousRecurs(element, tete.getSuivant());
-            if (tete.getElement() == element) {
+            if (Objects.equals(tete.getElement(), element)) {
                 size--;
                 return suiteListe;
             } else {
