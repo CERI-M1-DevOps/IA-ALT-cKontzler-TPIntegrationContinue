@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   test-and-package:
     runs-on: ubuntu-latest
@@ -18,5 +22,25 @@ jobs:
           distribution: corretto
           java-version: '21'
 
-      - name: Construire et lancer les tests
-        run: mvn -B package
+      - name: Mettre en cache les dépendances Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Mettre en cache les analyseurs SonarQube
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-sonar-
+
+      - name: Construire, tester et analyser le projet
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >-
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.projectKey=$(echo ${{ github.repository }} | sed 's-/-_-')
