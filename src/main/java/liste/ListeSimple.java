@@ -10,7 +10,7 @@ public class ListeSimple {
         return size;
     }
 
-    public void ajout(int element) {
+    public void ajout(Object element) {
         tete = new Noeud(element, tete);
         size++;
     }
